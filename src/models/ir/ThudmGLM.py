@@ -1,0 +1,62 @@
+import os
+from openai import OpenAI
+import json
+from src.types.BaseModel import BaseModel
+from typing import Dict, Any
+import time
+
+class ThudmGLMModel(BaseModel):
+    def __init__(self, api_key):
+        self.api_key = api_key
+
+        self.use_model_name='THUDM/GLM-4-32B-0414'
+
+        super().__init__(
+            model_name="GLM-Z1-32B-0414",
+            base_url="https://api.siliconflow.cn/v1",
+            api_key=api_key
+        )
+
+        self.client = OpenAI(api_key=self.api_key, base_url=self.base_url)
+
+    def generate_answer(self, test_case):
+        prompt = self.format_prompt(test_case)
+        start_time = time.time()
+
+        try:
+            messages = [prompt["system"], prompt["user"]]
+            messages.append({
+                "role": "user",
+                "content": str(test_case["test_case"]["input"]["text"]),
+            })
+            completion = self.client.chat.completions.create(
+                model=self.use_model_name,
+                messages=messages,
+            )
+            predicted_answer = completion.choices[0].message.content
+            usage = completion.usage
+            token_count = {
+                "input_tokens": usage.prompt_tokens,
+                "output_tokens": usage.completion_tokens,
+                "total_tokens": usage.total_tokens
+            }
+
+        except Exception as e:
+            print(f"[ERROR] Failed to call model: {e}")
+            predicted_answer = "error"
+            token_count = {
+                "input_tokens": 0,
+                "output_tokens": 0,
+                "total_tokens": 0
+            }
+
+        response_time = time.time() - start_time
+
+        return self.format_result(
+            test_case=test_case,
+            predicted_answer=predicted_answer,
+            prompt=prompt,
+            response_time=response_time,
+            token_count=token_count
+        )
+

@@ -1,0 +1,29 @@
+# Core dependencies
+numpy
+pandas
+tqdm
+
+# PDF processing
+PyMuPDF
+pdf2image
+pypdf
+
+# Image processing
+Pillow
+opencv-python
+matplotlib
+
+# Model & API calls
+requests
+openai
+httpx
+mistralai
+transformers
+google-generativeai
+
+# Config and data formats
+pyyaml
+
+# Evaluation & formatting
+scikit-learn
+nltk
