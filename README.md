@@ -271,6 +271,10 @@ python run_benchmark.py
 
 ---
 
+## 📨 Supplementary Material
+[Source Documents]([appendix/tables/source_documents.pdf](https://github.com/yulab-pku/MicrobeQuest/blob/main/resources/supplementaryMaterial.pdf))
+
+
 ## 📨 Contact
 
 
